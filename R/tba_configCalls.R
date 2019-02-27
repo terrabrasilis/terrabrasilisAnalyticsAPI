@@ -14,21 +14,21 @@ tba_list_loinames <- function(apiPath, appIdentifier) {
   resJSON <- tba_request(paste(apiPath, "config/loinames", sep = ""), h)
   
   # format lois dataframes for loinames rows 
-  resJSON <- dplyr::bind_rows(resJSON$lois$loinames)
+  resTibble <- dplyr::bind_rows(resJSON$lois$loinames)
   
   # initialize loi column
-  resJSON <- cbind(resJSON, loi = 0)
+  resTibble <- cbind(resTibble, loi = 0)
   count <- 1
   
   # for each loi binds a new set of values
   for (i in 1:length(resJSON$lois$gid)) {
     size <- nrow(resJSON$lois$loinames[[i]])
-    resJSON[,"loi"][count:(count+size-1)] <- rep(resJSON$lois$gid[i], size)
+    resTibble[,"loi"][count:(count+size-1)] <- rep(resJSON$lois$gid[i], size)
     count = count + size
   }
   
   # wrangle loinames as tibble
-  return(tibble::as_tibble(resJSON))
+  return(tibble::as_tibble(resTibble))
 
 }
 
@@ -119,12 +119,12 @@ tba_list_periods <- function(apiPath, appIdentifier) {
 #' list all loinames by loi
 #'
 #' @param apiPath path of terrabrasilis analytics server API
-#' @param loi define type of local of interest
 #' @param appIdentifier define the application identifier
-#' 
-#' @name tba_list_loinamesByloi
+#' @param loi define type of local of interest
+#'  
+#' @name tba_list_loinamesByLoi
 #' @export
-tba_list_loinamesByloi <- function(apiPath, loi, appIdentifier) {
+tba_list_loinamesByLoi <- function(apiPath, appIdentifier, loi) {
   
   # define config header
   h <- tba_configHeader(curl::new_handle(), appIdentifier)
@@ -133,6 +133,6 @@ tba_list_loinamesByloi <- function(apiPath, loi, appIdentifier) {
   resJSON <- tba_request(paste(apiPath, "config/query/loinames?loi=", loi, sep = ""), h)
   
   # wrangle loinames as tibble
-  return(tibble::as_tibble(resJSON$lois$loinames))
+  return(tibble::as_tibble(resJSON$lois$loinames[[1]]))
   
 }
