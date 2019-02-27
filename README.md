@@ -4,7 +4,7 @@
 
 ## Getting started
 
-Installing and loading wtss package
+Installing and loading terrabrasilisAnalyticsAPI package in R
 
 ``` r
 devtools::install_github("terrabrasilis/terrabrasilisAnalyticsAPI") # github group name is terrabrasilis
@@ -29,7 +29,7 @@ appIdentifier <- tba_list_apps_identifier(tbaAPIPath)
 2  prodes_amazon Dashboard of the Prodes in the Amazon Forest 2018-12-12 09:22
 ```
 
-With that in mind, examples let's create a prodes_cerrado variable
+With that in mind, let's create a prodesCerrado variable.
 
 ``` r
 prodesCerrado <- appIdentifier$identifier[1]
@@ -69,7 +69,7 @@ classes <- tba_list_classes(tbaAPIPath, prodesCerrado)
 classes
 ```
 
-In this case, it is just one class designating deforestation label. Other thematic mapping, however, would contain more than one class or even the same class name.
+In this case, it is just one class designating deforestation label. Other thematic mapping projects, however, would contain more than one class or even the same class name.
 
 ```r
 # A tibble: 1 x 3
@@ -78,7 +78,7 @@ In this case, it is just one class designating deforestation label. Other themat
 1     1 deforestation It is the process of complete and permanent disappearance of forests
 ```
 
-Besides responding which classes and periods, users can ask which local of interests (lois) as states, municipalities, conservation units, indigeneous areas, and Landsat Path/Row they are interested for. 
+Besides responding which classes and periods, users might ask which local of interests (lois) as states, municipalities, conservation units, indigeneous areas, and Landsat Path/Row, the API provides. 
 
 ```r
 lois <- tba_list_lois(tbaAPIPath, prodesCerrado)
@@ -96,7 +96,7 @@ lois
 4     4 Indi    
 5     5 Pathrow 
 ```
-Nevertheless, they are not considered the final granularity since each state, municipality, conservation unit, indigeneous areas, and Landsat Path/Row also contains small-scale local of interests, also known here as local of interests names (loinames).
+Nevertheless, lois are not considered the final granularity since each state, municipality, conservation unit, indigeneous areas, and Landsat Path/Row also contains small-scale local of interests, also known here as local of interests names (loinames).
 
 ```r
 loinames <- tba_list_loinames(tbaAPIPath, prodesCerrado)
@@ -121,7 +121,7 @@ loinames[20:30,]
 11 10704 ESTAÇÃO ECOLÓGICA DE RIBEIRÃO PRETO                   3```
 ```
 
-User are able to filter loinames by one specific loi such as UF.
+Users are able to filter loinames by one specific loi such as UF.
 
 ```r
 loiUF = dplyr::filter(lois, grepl("UF", name))$gid
@@ -150,7 +150,7 @@ loinamesByLoi
 13  9058 RONDÔNIA  
 ```
 
-All this data is used to gather specific thematic map area values produced by government agencies such as the National Institute for Space Research. In this example, users are able to see an acquisition of data by loiname, that is, the function acepts as parameters, the class name and loiname gid as well.
+All this data is used to gather specific thematic map area values produced by government agencies such as the National Institute for Space Research. In this example, users are able to acquire data by loiname, that is, the function accepts as parameters, the class name and loiname gid as well.
 
 ```r
 data <- tba_get_dataByLoiname(tbaAPIPath, prodesCerrado, classes$name, loinamesByLoi[1,]$gid)
@@ -182,7 +182,32 @@ finalDF
 > 
 ```
 
-A more deep analysis can be seen here. Figure 1 depicts predicted values of deforestation data for all Brazilian Cerrado States as a result of such analysis. 
+The same query can be performed using get data by parameters function. In this case, users pass also as parameters a start and end data. Unlikely the previous call, users will not receive all the available timeline as soon as they really desire.
+
+```r
+data <- tba_get_dataByParameters(tbaAPIPath, prodesCerrado, classes$name, loinames[1,]$gid, "1988-01-01", "2001-01-01")
+
+startDate <- data$periods$startDate[1,]
+
+endDate <- data$periods$endDate[1,]
+
+loi <- data$periods$features[[1]]$loi
+
+loiname <- data$periods$features[[1]]$loiname
+
+areas <- data$periods$features[[1]]$areas
+
+finalDF <- cbind(loi = loi, 
+                 loiname = loiname, 
+                 startDate = startDate, 
+                 endDate = endDate, 
+                 areas,
+                 row.names = NULL)
+
+finalDF
+```
+
+A more deep analysis can be seen [here](demo/smoothed-data.R). Figure 1 depicts predicted values of deforestation data for all Brazilian Cerrado States as a result of such analysis. 
 
 <p align="center">
 <img src="inst/extdata/smoothed-data.png" alt="Figure 1 - Linear smooth of deforestation data for all the Brazilian Cerrado States."  />
