@@ -20,10 +20,14 @@ tba_get_dataByLoiname <- function(apiPath, appIdentifier, class, loiname) {
   
 }
 
-#' list all lois
+#' list data by querying parameters
 #'
 #' @param apiPath a curl handle used to configure a request
-#' @param appIdentifier define the application identifier
+#' @param appIdentifier defines the application identifier
+#' @param class label to designate the classes
+#' @param loiname  local of interest name
+#' @param startDate initial date from the interval
+#' @param endDate final date from the interval
 #' 
 #' @name tba_get_dataByParameters
 #' @export
@@ -35,11 +39,11 @@ tba_get_dataByParameters <- function(apiPath, appIdentifier, class, loiname, sta
   # request locals of interests with a specific header
   resJSON <- tba_request(paste(apiPath, 
                                "data/query?class=", class, 
-                               "&loiname", loiname, 
-                               "&startDate", startDate, 
-                               "&endDate", endDate, sep = ""), h)
+                               "&loiname=", loiname, 
+                               "&startdate=", startDate, 
+                               "&enddate=", endDate, sep = ""), h)
   
   # wrangle data by parameters respose into tibble
-  return(tibble::as_tibble(resJSON))
+  return(resJSON)
   
 }
