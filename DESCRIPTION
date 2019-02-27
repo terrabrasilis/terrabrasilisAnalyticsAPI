@@ -6,7 +6,11 @@ Author: Luiz Fernando Assis
 Maintainer: Luiz Fernando Assis <luiz.assis@inpe.br>
 Description: terrabrasilis is an R client package for TerraBrasilis analytics API of thematic maps.
 Depends: R (>= 3.0.0)
-Imports: methods,curl,jsonlite
+Imports: methods,
+         curl,
+         dplyr,
+         jsonlite,
+         tibble
 License: LGPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
