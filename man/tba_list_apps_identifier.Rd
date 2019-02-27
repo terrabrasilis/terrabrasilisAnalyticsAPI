@@ -4,12 +4,10 @@
 \alias{tba_list_apps_identifier}
 \title{set header for configs}
 \usage{
-tba_list_apps_identifier(apiPath, appIdentifier)
+tba_list_apps_identifier(apiPath)
 }
 \arguments{
 \item{apiPath}{a curl handle used to configure a request}
-
-\item{appIdentifier}{define the application identifier}
 }
 \description{
 set header for configs
