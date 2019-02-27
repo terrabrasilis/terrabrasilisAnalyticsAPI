@@ -4,7 +4,7 @@
 
 ## Getting started
 
-Installing and loading wtss package
+Installing and loading terrabrasilisAnalyticsAPI package in R
 
 ``` r
 devtools::install_github("terrabrasilis/terrabrasilisAnalyticsAPI") # github group name is terrabrasilis
@@ -121,7 +121,7 @@ loinames[20:30,]
 11 10704 ESTAÇÃO ECOLÓGICA DE RIBEIRÃO PRETO                   3```
 ```
 
-User are able to filter loinames by one specific loi such as UF.
+Users are able to filter loinames by one specific loi such as UF.
 
 ```r
 loiUF = dplyr::filter(lois, grepl("UF", name))$gid
@@ -182,7 +182,32 @@ finalDF
 > 
 ```
 
-A more deep analysis can be seen here. Figure 1 depicts predicted values of deforestation data for all Brazilian Cerrado States as a result of such analysis. 
+The same query can be performed using get data by parameters function. In this case, users can also pass as parameters a start and end data. Unlikely the previous function, which users will receive data from the available timeline.
+
+```r
+data <- tba_get_dataByParameters(tbaAPIPath, prodesCerrado, classes$name, loinames[1,]$gid, "1988-01-01", "2001-01-01")
+
+startDate <- data$periods$startDate[1,]
+
+endDate <- data$periods$endDate[1,]
+
+loi <- data$periods$features[[1]]$loi
+
+loiname <- data$periods$features[[1]]$loiname
+
+areas <- data$periods$features[[1]]$areas
+
+finalDF <- cbind(loi = loi, 
+                 loiname = loiname, 
+                 startDate = startDate, 
+                 endDate = endDate, 
+                 areas,
+                 row.names = NULL)
+
+finalDF
+```
+
+A more deep analysis can be seen [here](demo/smoothed-data.R). Figure 1 depicts predicted values of deforestation data for all Brazilian Cerrado States as a result of such analysis. 
 
 <p align="center">
 <img src="inst/extdata/smoothed-data.png" alt="Figure 1 - Linear smooth of deforestation data for all the Brazilian Cerrado States."  />
