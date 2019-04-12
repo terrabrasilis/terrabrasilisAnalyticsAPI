@@ -24,9 +24,10 @@ appIdentifier <- tba_list_apps_identifier(tbaAPIPath)
 ```
 
 ``` r
-      identifier                                         name          created
-1 prodes_cerrado       Dashboard of the Prodes in the Cerrado 2018-12-12 09:22
-2  prodes_amazon Dashboard of the Prodes in the Amazon Forest 2018-12-12 09:22
+           identifier                                               name          created
+1      prodes_cerrado             Dashboard of the Prodes in the Cerrado 2019-03-20 23:30
+2       prodes_amazon       Dashboard of the Prodes in the Amazon Forest 2019-03-20 23:30
+3 prodes_legal_amazon Dashboard of the Prodes in the Legal Amazon Forest 2019-03-20 23:37
 ```
 
 With that in mind, let's create a prodesCerrado variable.
@@ -59,6 +60,7 @@ periods
 10           2014               8             1         2015             7          31
 11           2015               8             1         2016             7          31
 12           2016               8             1         2017             7          31
+13           2017               8             1         2018             7          31
 ```
 
 Users can also ask to the API, for example, which classes do PRODES Cerrado contains?
@@ -89,11 +91,11 @@ lois
 ```r
 # A tibble: 5 x 2
     gid name    
-* <int> <chr>   
+  <int> <chr>   
 1     1 UF      
-2     2 MUN     
-3     3 ConsUnit
-4     4 Indi    
+2     3 ConsUnit
+3     4 Indi    
+4     2 MUN     
 5     5 Pathrow 
 ```
 Nevertheless, lois are not considered the final granularity since each state, municipality, conservation unit, indigeneous areas, and Landsat Path/Row also contains small-scale local of interests, also known here as local of interests names (loinames).
@@ -106,19 +108,19 @@ loinames[20:30,]
 
 ```r
 # A tibble: 11 x 3
-     gid loiname                                             loi
-   <int> <chr>                                             <dbl>
- 1 10555 PARQUE ESTADUAL ALTAMIRO DE MOURA PACHECO             3
- 2 10463 ESTAçãO ECOLóGICA DE AVARé                            3
- 3 10689 FLORESTA ESTADUAL DE ASSIS                            3
- 4 10697 PARQUE NACIONAL DA CHAPADA DOS VEADEIROS              3
- 5 10566 PARQUE ESTADUAL SERRA DO INTENDENTE                   3
- 6 10715 PARQUE NATURAL MUNICIPAL PEDRO GERALDO DE MENEZES     3
- 7 10596 RPPN TOCA DA PACA                                     3
- 8 10503 PARQUE ESTADUAL PAU FURADO                            3
- 9 10642 ÁREA DE PROTEçãO AMBIENTAL DO LIMOEIRO                3
-10 10613 RPPN FLOR DO CERRADO III                              3
-11 10704 ESTAÇÃO ECOLÓGICA DE RIBEIRÃO PRETO                   3```
+     gid loiname                                                               loi
+   <int> <chr>                                                               <dbl>
+ 1  1481 PARQUE ESTADUAL SERRA VERDE                                             3
+ 2  1566 RESERVA PARTICULAR DO PATRIMÔNIO NATURAL JOAQUIM THEODORO DE MORAES     3
+ 3  1567 PARQUE ESTADUAL DE VASSUNUNGA                                           3
+ 4  1404 ESTAÇÃO ECOLÓGICA ITABERÁ                                               3
+ 5  1421 ÁREA DE PROTEÇÃO AMBIENTAL LAGO DE PEIXE/ANGICAL                        3
+ 6  1405 ÁREA DE PROTEÇÃO AMBIENTAL DO SALTO MAGESSI                             3
+ 7  1446 ESTAçãO ECOLóGICA DE SANTA BáRBARA                                      3
+ 8  1603 RESERVA DE DESENVOLVIMENTO SUSTENTáVEL NASCENTES GERAIZEIRAS            3
+ 9  1649 RESERVA EXTRATIVISTA EXTREMO NORTE DO TOCANTINS                         3
+10  1626 RESERVA BIOLÓGICA DA CONTAGEM                                           3
+11  1658 RESERVA PARTICULAR DO PATRIMÔNIO NATURAL PONTE DE PEDRA                 3
 ```
 
 Users are able to filter loinames by one specific loi such as UF.
@@ -134,20 +136,20 @@ loinamesByLoi
 ```r
 # A tibble: 13 x 2
      gid loiname           
- * <int> <chr>             
- 1  9050 MATO GROSSO       
- 2  9051 MATO GROSSO DO SUL
- 3  9049 MARANHÃO          
- 4  9055 SÃO PAULO         
- 5  9047 DISTRITO FEDERAL  
- 6  9052 MINAS GERAIS      
- 7  9056 TOCANTINS         
- 8  9046 BAHIA             
- 9  9048 GOIÁS             
-10  9054 PIAUÍ             
-11  9057 PARANÁ            
-12  9053 PARÁ              
-13  9058 RONDÔNIA  
+   <int> <chr>             
+ 1    11 TOCANTINS         
+ 2     7 MINAS GERAIS      
+ 3    10 SÃO PAULO         
+ 4     9 PIAUÍ             
+ 5    12 PARANÁ            
+ 6    13 RONDÔNIA          
+ 7     4 MARANHÃO          
+ 8     5 MATO GROSSO       
+ 9     2 DISTRITO FEDERAL  
+10     1 BAHIA             
+11     3 GOIÁS             
+12     6 MATO GROSSO DO SUL
+13     8 PARÁ  
 ```
 
 All this data is used to gather specific thematic map area values produced by government agencies such as the National Institute for Space Research. In this example, users are able to acquire data by loiname, that is, the function accepts as parameters, the class name and loiname gid as well.
@@ -176,9 +178,12 @@ finalDF
 ```
 
 ```r
-  loi loiname startDate.year startDate.month startDate.day endDate.year endDate.month endDate.day type      area
-1   1    9050           1988               8             1         2000             7          31    1   293.613
-2   1    9050           1988               8             1         2000             7          31    2 90877.468
+  loi loiname startDate.year startDate.month startDate.day endDate.year endDate.month endDate.day type
+1   1      11           1988               8             1         2000             7          31    1
+2   1      11           1988               8             1         2000             7          31    2
+      area
+1 38003.72
+2 38286.16
 > 
 ```
 
@@ -205,6 +210,16 @@ finalDF <- cbind(loi = loi,
                  row.names = NULL)
 
 finalDF
+```
+
+```r
+  loi loiname startDate.year startDate.month startDate.day endDate.year endDate.month endDate.day type
+1   1      11           1988               8             1         2000             7          31    1
+2   1      11           1988               8             1         2000             7          31    2
+      area
+1 38003.72
+2 38286.16
+> 
 ```
 
 A more deep analysis can be seen [here](demo/smoothed-data.R). Figure 1 depicts predicted values of deforestation data for all Brazilian Cerrado States as a result of such analysis. 
