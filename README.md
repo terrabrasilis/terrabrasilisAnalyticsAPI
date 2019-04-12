@@ -128,7 +128,7 @@ Users are able to filter loinames by one specific loi such as UF.
 ```r
 loiUF = dplyr::filter(lois, grepl("UF", name))$gid
 
-loinamesByLoi <- tba_list_loinamesByLoi(tbaAPIPath, appIdentifier$identifier[1], loiUF)
+loinamesByLoi <- tba_list_loinamesByLoi(tbaAPIPath, prodesCerrado, loiUF)
 
 loinamesByLoi
 ```
@@ -150,6 +150,22 @@ loinamesByLoi
 11     3 GOIÁS             
 12     6 MATO GROSSO DO SUL
 13     8 PARÁ  
+```
+
+In order to fit data into governmental needs, we also considered filters for each data recognized that as type in the data API call.
+
+```r
+datafilters <- tba_list_filters(tbaAPIPath, prodesCerrado)
+
+datafilters
+```
+
+```r
+# A tibble: 2 x 2
+     id type              
+  <int> <chr>             
+1     1 fid_area >= 0.0625
+2     2 fid_area >= 0.01  
 ```
 
 All this data is used to gather specific thematic map area values produced by government agencies such as the National Institute for Space Research. In this example, users are able to acquire data by loiname, that is, the function accepts as parameters, the class name and loiname gid as well.
