@@ -71,7 +71,7 @@ tba_list_lois <- function(apiPath, appIdentifier) {
   resJSON$lois <- resJSON$lois[order(resJSON$lois$gid),] 
   
   # wrangle lois as tibble
-  return(tibble::as_tibble(resJSON$lois))
+  return(tibble::as_tibble(resJSON$lois[,1:2]))
 
 }
 
