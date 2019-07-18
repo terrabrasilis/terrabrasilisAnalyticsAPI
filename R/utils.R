@@ -2,9 +2,9 @@
 #'
 #' @param handle a curl handle used to configure a request
 #' 
-#' @name tba_appsHeader
+#' @name appsHeader
 #' @export
-tba_appsHeader <- function(handle) {
+appsHeader <- function(handle) {
   
   curl::handle_setheaders(handle,
                           "Content-Type" = "application/json",
@@ -19,9 +19,9 @@ tba_appsHeader <- function(handle) {
 #' @param handle a curl handle used to configure a request
 #' @param appIdentifier define the application identifier
 #' 
-#' @name tba_configHeader
+#' @name configHeader
 #' @export
-tba_configHeader <- function(handle, appIdentifier) {
+configHeader <- function(handle, appIdentifier) {
   
   curl::handle_setheaders(handle,
                           "Content-Type" = "application/json",
@@ -38,9 +38,9 @@ tba_configHeader <- function(handle, appIdentifier) {
 #' @param handle a curl handle used to configure a request
 #' @param appIdentifier application identifier
 #' 
-#' @name tba_dataHeader
+#' @name dataHeader
 #' @export
-tba_dataHeader <- function(handle, appIdentifier) {
+dataHeader <- function(handle, appIdentifier) {
   
   curl::handle_setheaders(handle,
                           "Content-Type" = "application/json",
@@ -59,7 +59,7 @@ tba_dataHeader <- function(handle, appIdentifier) {
 #' 
 #' @name tba_request
 #' @export
-tba_request <- function(URL, handle) {
+request <- function(URL, handle) {
   
   req <- curl::curl_fetch_memory(url = URL, handle = handle)
   

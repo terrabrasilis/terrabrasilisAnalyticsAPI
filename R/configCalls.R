@@ -1,17 +1,17 @@
-#' list all loinames
+#' list all local of interest names
 #'
 #' @param apiPath path of terrabrasilis analytics server API
 #' @param appIdentifier define the application identifier
 #' 
-#' @name tba_list_loinames
+#' @name list_local_of_interests
 #' @export
-tba_list_loinames <- function(apiPath, appIdentifier) {
+list_local_of_interests <- function(apiPath, appIdentifier) {
 
   # define config header
-  h <- tba_configHeader(curl::new_handle(), appIdentifier)
+  h <- configHeader(curl::new_handle(), appIdentifier)
 
   # request locals of interests with a specific header
-  resJSON <- tba_request(paste(apiPath, "config/loinames", sep = ""), h)
+  resJSON <- request(paste(apiPath, "config/loinames", sep = ""), h)
   
   # format lois dataframes for loinames rows 
   resTibble <- dplyr::bind_rows(resJSON$lois$loinames)
@@ -37,35 +37,35 @@ tba_list_loinames <- function(apiPath, appIdentifier) {
 #' @param apiPath path of terrabrasilis analytics server API
 #' @param appIdentifier define the application identifier
 #' 
-#' @name tba_list_filters
+#' @name list_filters
 #' @export
-tba_list_filters <- function(apiPath, appIdentifier) {
+list_filters <- function(apiPath, appIdentifier) {
 
   # define config header
-  h <- tba_configHeader(curl::new_handle(), appIdentifier)
+  h <- configHeader(curl::new_handle(), appIdentifier)
 
   # request locals of interests with a specific header
-  resJSON <- tba_request(paste(apiPath, "config/filters", sep = ""), h)
+  resJSON <- request(paste(apiPath, "config/filters", sep = ""), h)
   
   # wrangle filters as tibble
   return(tibble::as_tibble(resJSON$filters))
 
 }
 
-#' list all lois
+#' list all locals
 #'
 #' @param apiPath a curl handle used to configure a request
 #' @param appIdentifier define the application identifier
 #' 
-#' @name tba_list_lois
+#' @name list_locals
 #' @export
-tba_list_lois <- function(apiPath, appIdentifier) {
+list_locals <- function(apiPath, appIdentifier) {
 
   # define config header
-  h <- tba_configHeader(curl::new_handle(), appIdentifier)
+  h <- configHeader(curl::new_handle(), appIdentifier)
 
   # request locals of interests with a specific header
-  resJSON <- tba_request(paste(apiPath, "config/lois", sep = ""), h)
+  resJSON <- request(paste(apiPath, "config/lois", sep = ""), h)
   
   # order table by locals of interests
   resJSON$lois <- resJSON$lois[order(resJSON$lois$gid),] 
@@ -80,15 +80,15 @@ tba_list_lois <- function(apiPath, appIdentifier) {
 #' @param apiPath path of terrabrasilis analytics server API
 #' @param appIdentifier define the application identifier
 #' 
-#' @name tba_list_classes
+#' @name list_classes
 #' @export
-tba_list_classes <- function(apiPath, appIdentifier) {
+list_classes <- function(apiPath, appIdentifier) {
 
   # define config header
-  h <- tba_configHeader(curl::new_handle(), appIdentifier)
+  h <- configHeader(curl::new_handle(), appIdentifier)
 
   # request classes with a specific header
-  resJSON <- tba_request(paste(apiPath, "config/classes", sep = ""), h)
+  resJSON <- request(paste(apiPath, "config/classes", sep = ""), h)
   
   # wrangle classes as tibble
   return(tibble::as_tibble(resJSON$classes))
@@ -100,15 +100,15 @@ tba_list_classes <- function(apiPath, appIdentifier) {
 #' @param apiPath path of terrabrasilis analytics server API
 #' @param appIdentifier define the application identifier
 #' 
-#' @name tba_list_periods
+#' @name list_periods
 #' @export
-tba_list_periods <- function(apiPath, appIdentifier) {
+list_periods <- function(apiPath, appIdentifier) {
 
   # define config header
-  h <- tba_configHeader(curl::new_handle(), appIdentifier)
+  h <- configHeader(curl::new_handle(), appIdentifier)
 
   # request periods with a specific header
-  resJSON <- tba_request(paste(apiPath, "config/periods", sep = ""), h)
+  resJSON <- request(paste(apiPath, "config/periods", sep = ""), h)
   
   # wrangle start and end date periods into one
   return(tibble::as_tibble(cbind(startDate = resJSON$periods$startDate, 
@@ -122,15 +122,15 @@ tba_list_periods <- function(apiPath, appIdentifier) {
 #' @param appIdentifier define the application identifier
 #' @param loi define type of local of interest
 #'  
-#' @name tba_list_loinamesByLoi
+#' @name list_localOfInterestByLocal
 #' @export
-tba_list_loinamesByLoi <- function(apiPath, appIdentifier, loi) {
+list_localOfInterestByLocal <- function(apiPath, appIdentifier, loi) {
   
   # define config header
-  h <- tba_configHeader(curl::new_handle(), appIdentifier)
+  h <- configHeader(curl::new_handle(), appIdentifier)
   
   # request periods with a specific header
-  resJSON <- tba_request(paste(apiPath, "config/query/loinames?loi=", loi, sep = ""), h)
+  resJSON <- request(paste(apiPath, "config/query/loinames?loi=", loi, sep = ""), h)
   
   # wrangle loinames as tibble
   return(tibble::as_tibble(resJSON$lois$loinames[[1]]))
