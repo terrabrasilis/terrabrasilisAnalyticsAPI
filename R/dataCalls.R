@@ -1,17 +1,25 @@
 dataTransformJSON2tibble <- function(resJSON) {
 
   "%>%" <- magrittr::`%>%`
-  # transform JSON request into tibble format
+    # transform JSON request into tibble format
   resJSON2tibble <- resJSON %>%
     purrr::map_if(is.data.frame, list) %>%
     tibble::as_tibble()
   
-  # extract areas from features with loi, loinames and filters
-  features <- resJSON2tibble$periods[[1]]$features %>% 
+  # extract areas from features 
+  areas <- resJSON2tibble$periods[[1]]$features %>% 
     dplyr::bind_rows() %>% 
     dplyr::bind_cols() %>% 
     dplyr::select(utils::tail(names(.), 1)) %>% 
     tidyr::unnest()
+  
+  # extract lois from features 
+  lois <- resJSON2tibble$periods[[1]]$features %>% 
+    dplyr::bind_cols() %>% 
+    dplyr::select(utils::head(names(.), 2)) 
+  
+  # merge lois and areas and build a new features
+  features <- merge(lois, areas)
   
   # extract startDate and endDate
   startDate <- resJSON2tibble$periods[[1]]$startDate
@@ -72,7 +80,7 @@ get_dataByLocalOfInterest <- function(apiPath, appIdentifier, class, loiname) {
 #' 
 #' @name get_dataByParameters
 #' @export
-  get_dataByParameters <- function(apiPath, appIdentifier, class, loiname, startDate, endDate) {
+get_dataByParameters <- function(apiPath, appIdentifier, class, loiname, startDate, endDate) {
   
   # define config header
   h <- configHeader(curl::new_handle(), appIdentifier)
