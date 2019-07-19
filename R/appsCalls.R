@@ -10,6 +10,8 @@ list_datasets <- function(apiPath) {
   
   resJSON <- request(paste(apiPath, "apps/identifier", sep = ""), h)
   
-  return(resJSON)
+  datasets <- resJSON$identifier
+  
+  return(datasets)
   
 }
