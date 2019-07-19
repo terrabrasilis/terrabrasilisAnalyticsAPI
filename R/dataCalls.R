@@ -1,7 +1,8 @@
 dataTransformJSON2tibble <- function(resJSON) {
-  
+
+  "%>%" <- magrittr::`%>%`
   # transform JSON request into tibble format
-  resJSON2tibble <- resJSON %>% 
+  resJSON2tibble <- resJSON %>%
     purrr::map_if(is.data.frame, list) %>%
     tibble::as_tibble()
   
