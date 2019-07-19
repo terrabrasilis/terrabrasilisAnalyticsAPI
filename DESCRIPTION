@@ -10,7 +10,10 @@ Imports: methods,
          curl,
          dplyr,
          jsonlite,
-         tibble
+         magrittr,
+         purrr,
+         tibble,
+         tidyr
 License: LGPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
