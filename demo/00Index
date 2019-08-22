@@ -1,1 +1,3 @@
-smoothed-data    Create smoothed ggplot with deforestation data
+linear-regression    Create smoothed ggplot with deforestation data
+boxplot     Create a boxplot with deforestation data
+scatter-plot    Create a scatter-plot with deforestation data

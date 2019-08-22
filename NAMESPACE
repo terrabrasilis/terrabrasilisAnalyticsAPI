@@ -3,6 +3,7 @@
 export(appsHeader)
 export(configHeader)
 export(dataHeader)
+export(dataTransformJSON2tibble)
 export(get_dataByLocalOfInterest)
 export(get_dataByParameters)
 export(list_classes)
