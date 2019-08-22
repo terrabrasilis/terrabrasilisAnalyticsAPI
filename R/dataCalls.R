@@ -1,20 +1,33 @@
+#' transform json into tibble
+#'
+#' @param resJSON server response
+#' 
+#' @name dataTransformJSON2tibble
+#' @export
 dataTransformJSON2tibble <- function(resJSON) {
 
   "%>%" <- magrittr::`%>%`
-    # transform JSON request into tibble format
+  
+  # transform JSON request into tibble format
   resJSON2tibble <- resJSON %>%
     purrr::map_if(is.data.frame, list) %>%
     tibble::as_tibble()
   
+  # remove null elements
+  features <- lapply(resJSON2tibble$periods[[1]]$features, function(x) { if(length(x) && nrow(x) != 0) return(x); })
+  nrow_null <- if(length(features) && length(which(sapply(features, is.null))) != 0) which(sapply(features, is.null)) else -(1:length(features))
+  
+  features <- features[-nrow_null]
+
   # extract areas from features 
-  areas <- resJSON2tibble$periods[[1]]$features %>% 
+  areas <- features %>% 
     dplyr::bind_rows() %>% 
     dplyr::bind_cols() %>% 
     dplyr::select(utils::tail(names(.), 1)) %>% 
     tidyr::unnest()
   
   # extract lois from features 
-  lois <- resJSON2tibble$periods[[1]]$features %>% 
+  lois <- features %>% 
     dplyr::bind_cols() %>% 
     dplyr::select(utils::head(names(.), 2)) 
   
@@ -22,12 +35,16 @@ dataTransformJSON2tibble <- function(resJSON) {
   features <- merge(lois, areas)
   
   # extract startDate and endDate
-  startDate <- resJSON2tibble$periods[[1]]$startDate
-  endDate <- resJSON2tibble$periods[[1]]$endDate
+  startDate <- resJSON2tibble$periods[[1]]$startDate[-nrow_null,]
+  endDate <- resJSON2tibble$periods[[1]]$endDate[-nrow_null,]
   
   # obtain nro of filters 
-  nrofilters <- nrow(resJSON2tibble$periods[[1]]$features[[1]]$areas[[1]])
-  
+  nrofilters <- lapply(resJSON2tibble$periods[[1]]$features, function(x) {
+    if(!length(x)) return(0) else return(nrow(x$areas[[1]]));
+  })
+  nrofilters <- unlist(nrofilters)
+  nrofilters <- nrofilters[nrofilters!=0]
+  if(!length(nrofilters)) nrofilters <- 0 else nrofilters <- max(nrofilters)
   # repeat startDate and endDate parameters for each filter
   periods <- cbind(startDate = startDate[rep(1:nrow(startDate),
                                              each=nrofilters),], 
@@ -40,16 +57,16 @@ dataTransformJSON2tibble <- function(resJSON) {
     dplyr::select(-dplyr::one_of("periods")) %>% 
     merge(periods)
   
-  return(result);
+    return(result);
   
 }
 
 #' get data by local of interest
 #'
 #' @param apiPath path of terrabrasilis analytics server API
-#' @param appIdentifier define the application identifier
-#' @param class define the application identifier
-#' @param loiname define the application identifier
+#' @param appIdentifier defines the application identifier
+#' @param class label to designate the classes
+#' @param loiname local of interest name
 #' 
 #' @name get_dataByLocalOfInterest
 #' @export
