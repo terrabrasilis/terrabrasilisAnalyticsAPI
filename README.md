@@ -14,40 +14,40 @@ library(terrabrasilisAnalyticsAPI) # R package name is terrabrasilisAnalyticsAPI
 Initialize Terrabrasilis Analytics API path variable
 
 ``` r 
-tbaAPIPath <- "http://terrabrasilis.dpi.inpe.br/dashboard/api/v1/redis-cli/"
+apiPath <- "http://terrabrasilis.dpi.inpe.br/dashboard/api/v1/redis-cli/"
 ```
 
 Define calls for application identifiers listing. From that information, it is possible then to make specific requests to other API end-points.
 
 ``` r
-appIdentifier <- tba_list_apps_identifier(tbaAPIPath)
-```
+appIdentifier <- list_datasets(apiPath)
 
-``` r
-           identifier                                               name          created
-1      prodes_cerrado             Dashboard of the Prodes in the Cerrado 2019-03-20 23:30
-2       prodes_amazon       Dashboard of the Prodes in the Amazon Forest 2019-03-20 23:30
-3 prodes_legal_amazon Dashboard of the Prodes in the Legal Amazon Forest 2019-03-20 23:37
+appIdentifier
+[1] "prodes_cerrado"      "prodes_amazon"       "prodes_legal_amazon"
 ```
 
 With that in mind, let's create a prodesCerrado variable.
 
 ``` r
-prodesCerrado <- appIdentifier$identifier[1]
+prodesCerrado <- appIdentifier[1]
+
+prodesCerrado
+[1] "prodes_cerrado"
 ```
 
-The first question that reminds us to ask to the API is: which periods do Prodes Cerrado contains? 
+The first question that reminds us to ask to the API is: which periods do Prodes Cerrado contains?
 
 ``` r
-periods <- tba_list_periods(tbaAPIPath, prodesCerrado)
+periods <- list_periods(apiPath, prodesCerrado)
 
 periods
 ```
 
 ``` r
-# A tibble: 12 x 6
+periods
+# A tibble: 13 x 6
    startDate.year startDate.month startDate.day endDate.year endDate.month endDate.day
- *          <int>           <int>         <int>        <int>         <int>       <int>
+            <int>           <int>         <int>        <int>         <int>       <int>
  1           1988               8             1         2000             7          31
  2           2000               8             1         2002             7          31
  3           2002               8             1         2004             7          31
@@ -66,7 +66,7 @@ periods
 Users can also ask to the API, for example, which classes do PRODES Cerrado contains?
 
 ```r
-classes <- tba_list_classes(tbaAPIPath, prodesCerrado)
+classes <- list_classes(apiPath, prodesCerrado)
 
 classes
 ```
@@ -76,16 +76,16 @@ In this case, it is just one class designating deforestation label. Other themat
 ```r
 # A tibble: 1 x 3
      id name          description                                                         
-* <int> <chr>         <chr>                                                               
+  <int> <chr>         <chr>                                                               
 1     1 deforestation It is the process of complete and permanent disappearance of forests
 ```
 
 Besides responding which classes and periods, users might ask which local of interests (lois) as states, municipalities, conservation units, indigeneous areas, and Landsat Path/Row, the API provides. 
 
 ```r
-lois <- tba_list_lois(tbaAPIPath, prodesCerrado)
+locals <- list_locals(apiPath, prodesCerrado)
 
-lois
+locals
 ```
 
 ```r
@@ -93,42 +93,42 @@ lois
     gid name    
   <int> <chr>   
 1     1 UF      
-2     3 ConsUnit
-3     4 Indi    
-4     2 MUN     
-5     5 Pathrow 
-```
-Nevertheless, lois are not considered the final granularity since each state, municipality, conservation unit, indigeneous areas, and Landsat Path/Row also contains small-scale local of interests, also known here as local of interests names (loinames).
-
-```r
-loinames <- tba_list_loinames(tbaAPIPath, prodesCerrado)
-
-loinames[20:30,]
+2     2 MUN     
+3     3 ConsUnit
+4     4 Indi    
+5     5 Pathrow
 ```
 
+Nevertheless, locals are not considered the final granularity since each state, municipality, conservation unit, indigeneous areas, and Landsat Path/Row also contain small-scale local of interests.
+
 ```r
-# A tibble: 11 x 3
+localOfInterest <- list_local_of_interests(apiPath, prodesCerrado)
+
+localOfInterest[14:23,]
+```
+
+```r
+# A tibble: 10 x 3
      gid loiname                                                               loi
    <int> <chr>                                                               <dbl>
- 1  1481 PARQUE ESTADUAL SERRA VERDE                                             3
- 2  1566 RESERVA PARTICULAR DO PATRIMÔNIO NATURAL JOAQUIM THEODORO DE MORAES     3
- 3  1567 PARQUE ESTADUAL DE VASSUNUNGA                                           3
- 4  1404 ESTAÇÃO ECOLÓGICA ITABERÁ                                               3
- 5  1421 ÁREA DE PROTEÇÃO AMBIENTAL LAGO DE PEIXE/ANGICAL                        3
- 6  1405 ÁREA DE PROTEÇÃO AMBIENTAL DO SALTO MAGESSI                             3
- 7  1446 ESTAçãO ECOLóGICA DE SANTA BáRBARA                                      3
- 8  1603 RESERVA DE DESENVOLVIMENTO SUSTENTáVEL NASCENTES GERAIZEIRAS            3
- 9  1649 RESERVA EXTRATIVISTA EXTREMO NORTE DO TOCANTINS                         3
-10  1626 RESERVA BIOLÓGICA DA CONTAGEM                                           3
-11  1658 RESERVA PARTICULAR DO PATRIMÔNIO NATURAL PONTE DE PEDRA                 3
+ 1  1586 PARQUE NATURAL MUNICIPAL DO SETOR SANTA CRUZ                            3
+ 2  1410 RESERVA BIOLÓGICA DO GUARÁ                                              3
+ 3  1431 MONUMENTO NATURAL ESTADUAL LAPA VERMELHA                                3
+ 4  1454 FLORESTA ESTADUAL SÃO JUDAS TADEU                                       3
+ 5  1548 RESERVA PARTICULAR DO PATRIMÔNIO NATURAL INTEGRA O PARQUE               3
+ 6  1496 ÁREA DE PROTEÇÃO AMBIENTAL MEANDROS DO ARAGUAIA                         3
+ 7  1481 PARQUE ESTADUAL SERRA VERDE                                             3
+ 8  1566 RESERVA PARTICULAR DO PATRIMÔNIO NATURAL JOAQUIM THEODORO DE MORAES     3
+ 9  1567 PARQUE ESTADUAL DE VASSUNUNGA                                           3
+10  1404 ESTAÇÃO ECOLÓGICA ITABERÁ                                               3
 ```
 
 Users are able to filter loinames by one specific loi such as UF.
 
 ```r
-loiUF = dplyr::filter(lois, grepl("UF", name))$gid
+loiUF = dplyr::filter(locals, grepl("UF", name))$gid
 
-loinamesByLoi <- tba_list_loinamesByLoi(tbaAPIPath, prodesCerrado, loiUF)
+loinamesByLoi <- list_localOfInterestByLocal(apiPath, prodesCerrado, loiUF)
 
 loinamesByLoi
 ```
@@ -149,15 +149,15 @@ loinamesByLoi
 10     1 BAHIA             
 11     3 GOIÁS             
 12     6 MATO GROSSO DO SUL
-13     8 PARÁ  
+13     8 PARÁ
 ```
 
 In order to fit data into governmental needs, we also considered filters for each data recognized that as type in the data API call.
 
 ```r
-datafilters <- tba_list_filters(tbaAPIPath, prodesCerrado)
+filters <- list_filters(apiPath, prodesCerrado)
 
-datafilters
+filters
 ```
 
 ```r
@@ -165,87 +165,71 @@ datafilters
      id type              
   <int> <chr>             
 1     1 fid_area >= 0.0625
-2     2 fid_area >= 0.01  
+2     2 fid_area >= 0.01
 ```
 
 All this data is used to gather specific thematic map area values produced by government agencies such as the National Institute for Space Research. In this example, users are able to acquire data by loiname, that is, the function accepts as parameters, the class name and loiname gid as well.
 
 ```r
-data <- tba_get_dataByLoiname(tbaAPIPath, prodesCerrado, classes$name, loinamesByLoi[1,]$gid)
+data <- get_dataByLocalOfInterest(apiPath, 
+                                  prodesCerrado, 
+                                  classes$name, 
+                                  loinamesByLoi[1,]$gid)
 
-startDate <- data$periods$startDate[1,]
-
-endDate <- data$periods$endDate[1,]
-
-loi <- data$periods$features[[1]]$loi
-
-loiname <- data$periods$features[[1]]$loiname
-
-areas <- data$periods$features[[1]]$areas
-
-finalDF <- cbind(loi = loi, 
-                 loiname = loiname, 
-                 startDate = startDate, 
-                 endDate = endDate, 
-                 areas,
-                 row.names = NULL)
-
-finalDF
+data
 ```
 
 ```r
-  loi loiname startDate.year startDate.month startDate.day endDate.year endDate.month endDate.day type
-1   1      11           1988               8             1         2000             7          31    1
-2   1      11           1988               8             1         2000             7          31    2
-      area
-1 38003.72
-2 38286.16
+             name         clazz startDate.year startDate.month startDate.day endDate.year endDate.month endDate.day loi loiname type      area
+1  PRODES CERRADO deforestation           1988               8             1         2000             7          31   1      11    1 38003.720
+2  PRODES CERRADO deforestation           1988               8             1         2000             7          31   1      11    2 38286.164
+3  PRODES CERRADO deforestation           2000               8             1         2002             7          31   1      11    1  5424.295
+4  PRODES CERRADO deforestation           2000               8             1         2002             7          31   1      11    2  5808.921
+5  PRODES CERRADO deforestation           2002               8             1         2004             7          31   1      11    1  5723.244
+6  PRODES CERRADO deforestation           2002               8             1         2004             7          31   1      11    2  6157.996
+7  PRODES CERRADO deforestation           2004               8             1         2006             7          31   1      11    1  4880.821
+8  PRODES CERRADO deforestation           2004               8             1         2006             7          31   1      11    2  5257.803
+9  PRODES CERRADO deforestation           2006               8             1         2008             7          31   1      11    1  3228.224
+10 PRODES CERRADO deforestation           2006               8             1         2008             7          31   1      11    2  3596.751
+11 PRODES CERRADO deforestation           2008               8             1         2010             7          31   1      11    1  3245.410
+12 PRODES CERRADO deforestation           2008               8             1         2010             7          31   1      11    2  3639.593
+13 PRODES CERRADO deforestation           2010               8             1         2012             7          31   1      11    1  3263.893
+14 PRODES CERRADO deforestation           2010               8             1         2012             7          31   1      11    2  3481.588
+15 PRODES CERRADO deforestation           2012               8             1         2013             7          31   1      11    1  2543.343
+16 PRODES CERRADO deforestation           2012               8             1         2013             7          31   1      11    2  2816.817
+17 PRODES CERRADO deforestation           2013               8             1         2014             7          31   1      11    1  2006.936
+18 PRODES CERRADO deforestation           2013               8             1         2014             7          31   1      11    2  2243.355
+19 PRODES CERRADO deforestation           2014               8             1         2015             7          31   1      11    1  2753.371
+20 PRODES CERRADO deforestation           2014               8             1         2015             7          31   1      11    2  3063.382
+21 PRODES CERRADO deforestation           2015               8             1         2016             7          31   1      11    1  1421.360
+22 PRODES CERRADO deforestation           2015               8             1         2016             7          31   1      11    2  1587.207
+23 PRODES CERRADO deforestation           2016               8             1         2017             7          31   1      11    1  1498.426
+24 PRODES CERRADO deforestation           2016               8             1         2017             7          31   1      11    2  1693.450
+25 PRODES CERRADO deforestation           2017               8             1         2018             7          31   1      11    1  1391.557
+26 PRODES CERRADO deforestation           2017               8             1         2018             7          31   1      11    2  1530.056
 > 
 ```
 
 The same query can be performed using get data by parameters function. In this case, users pass also as parameters a start and end data. Unlikely the previous call, users will not receive all the available timeline as soon as they really desire.
 
 ```r
-data <- tba_get_dataByParameters(tbaAPIPath, prodesCerrado, classes$name, loinames[1,]$gid, "1988-01-01", "2001-01-01")
+data <- get_dataByParameters(apiPath, 
+                            prodesCerrado, 
+                            classes$name, 
+                            loinamesByLoi[1,]$gid, 
+                            "1988-01-01", 
+                            "2001-01-01")
 
-startDate <- data$periods$startDate[1,]
 
-endDate <- data$periods$endDate[1,]
-
-loi <- data$periods$features[[1]]$loi
-
-loiname <- data$periods$features[[1]]$loiname
-
-areas <- data$periods$features[[1]]$areas
-
-finalDF <- cbind(loi = loi, 
-                 loiname = loiname, 
-                 startDate = startDate, 
-                 endDate = endDate, 
-                 areas,
-                 row.names = NULL)
-
-finalDF
+data
 ```
 
 ```r
-  loi loiname startDate.year startDate.month startDate.day endDate.year endDate.month endDate.day type
-1   1      11           1988               8             1         2000             7          31    1
-2   1      11           1988               8             1         2000             7          31    2
-      area
-1 38003.72
-2 38286.16
+            name         clazz startDate.year startDate.month startDate.day endDate.year endDate.month endDate.day loi loiname type     area
+1 PRODES CERRADO deforestation           1988               8             1         2000             7          31   1      11    1 38003.72
+2 PRODES CERRADO deforestation           1988               8             1         2000             7          31   1      11    2 38286.16
 > 
 ```
-
-A more deep analysis can be seen [here](demo/smoothed-data.R). Figure 1 depicts predicted values of deforestation data for all Brazilian Cerrado States as a result of such analysis. 
-
-<p align="center">
-<img src="inst/extdata/smoothed-data.png" alt="Figure 1 - Linear smooth of deforestation data for all the Brazilian Cerrado States."  />
-<p class="caption" align="center">
-Figure 1 - Linear smooth of deforestation data for all the Brazilian Cerrado States.
-</p>
-</p>
 
 ## References
 
