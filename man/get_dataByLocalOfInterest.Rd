@@ -9,11 +9,11 @@ get_dataByLocalOfInterest(apiPath, appIdentifier, class, loiname)
 \arguments{
 \item{apiPath}{path of terrabrasilis analytics server API}
 
-\item{appIdentifier}{define the application identifier}
+\item{appIdentifier}{defines the application identifier}
 
-\item{class}{define the application identifier}
+\item{class}{label to designate the classes}
 
-\item{loiname}{define the application identifier}
+\item{loiname}{local of interest name}
 }
 \description{
 get data by local of interest
