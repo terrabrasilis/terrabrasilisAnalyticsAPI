@@ -229,7 +229,7 @@ data
 1 PRODES CERRADO deforestation           1988               8             1         2000             7          31   1      11    1 38003.72
 2 PRODES CERRADO deforestation           1988               8             1         2000             7          31   1      11    2 38286.16
 > 
-```
+``` 
 
 ## References
 
