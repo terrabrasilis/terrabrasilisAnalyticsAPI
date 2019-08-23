@@ -12,24 +12,24 @@ apiPath <- "http://terrabrasilis.dpi.inpe.br/dashboard/api/v1/redis-cli/"
 # get all the application identifier
 appIdentifier <- list_datasets(apiPath)
 
-# define PRODES Amazon variable
-prodesAmazon <- appIdentifier[2]
+# define PRODES Cerrado variable
+prodesCerrado <- appIdentifier[1]
 
 # list periods
-periods <- list_periods(apiPath, prodesAmazon)
-  
+periods <- list_periods(apiPath, prodesCerrado)
+
 # list locals
-locals <- list_locals(apiPath, prodesAmazon)
+locals <- list_locals(apiPath, prodesCerrado)
 
 # list local of interests from first local
-localOfInterestByLocal <- list_localOfInterestByLocal(apiPath, prodesAmazon, locals$gid[1])
+localOfInterestByLocal <- list_localOfInterestByLocal(apiPath, prodesCerrado, locals$gid[1])
 
 # list classes
-classes <- list_classes(apiPath, prodesAmazon)
+classes <- list_classes(apiPath, prodesCerrado)
 
 # create tibble data for request input
 data <- tibble(path = apiPath, 
-               dataset = prodesAmazon, 
+               dataset = prodesCerrado, 
                class = classes$name, 
                local = localOfInterestByLocal$gid)
 
@@ -43,8 +43,8 @@ myfn <- function(var1, var2, var3, var4) {
 }
 
 result <- data %>%
-          rowwise() %>%
-          mutate(t = myfn(path, dataset, class, local))
+  rowwise() %>%
+  mutate(t = myfn(path, dataset, class, local))
 
 
 # update loop of ggplot for new API signature
@@ -75,15 +75,10 @@ grid.arrange(
   df[[6]],
   df[[7]],
   df[[8]],
-  df[[9]],
-  nrow = 3,
-  top = "Deforestation Data in Amazon Biome"
-  #bottom = textGrob(
-  #  "this footnote is right-justified",
-  #  gp = gpar(fontface = 3, fontsize = 9),
-  #  hjust = 1,
-  #  x = 1
-  #)
+  df[[13]],
+  df[[10]],
+  df[[11]],
+  df[[12]],
+  nrow = 4,
+  top = "Deforestation Data in Cerrado Biome"
 )
-
-
