@@ -210,7 +210,7 @@ data
 > 
 ```
 
-The same query can be performed using get data by parameters function. In this case, users pass also as parameters a start and end data. Unlikely the previous call, users will not receive all the available timeline as soon as they really desire.
+The same query can be performed using get data by parameters function. In this case, users pass also as parameters a start and end date. Unlikely the previous call, users will not receive all the available timeline as soon as they really desire.
 
 ```r
 data <- get_dataByParameters(apiPath, 
