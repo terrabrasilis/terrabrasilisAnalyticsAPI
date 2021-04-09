@@ -45,7 +45,7 @@ ggplot(f625, aes(x=endDate.year, y=area, color=endDate.year, group=endDate.year)
   geom_boxplot(outlier.shape = NA) +
   scale_y_continuous(limits = quantile(all$area, c(0.1, 0.9))) +
   expand_limits(y=25) + 
-  labs(colour = "Date") + labs(x = "Years") + labs(y = "Areas (km²)") +
+  labs(colour = "Date") + labs(x = "Years") + labs(y = "Areas km\u00B2") +
   theme(text = element_text(size=28))
 
 

@@ -4,8 +4,14 @@
 \alias{get_dataByParameters}
 \title{get data by querying parameters}
 \usage{
-get_dataByParameters(apiPath, appIdentifier, class, loiname, startDate,
-  endDate)
+get_dataByParameters(
+  apiPath,
+  appIdentifier,
+  class,
+  loiname,
+  startDate,
+  endDate
+)
 }
 \arguments{
 \item{apiPath}{a curl handle used to configure a request}

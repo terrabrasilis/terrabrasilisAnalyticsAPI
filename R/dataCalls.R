@@ -31,6 +31,8 @@ dataTransformJSON2tibble <- function(resJSON) {
     dplyr::bind_cols() %>% 
     dplyr::select(utils::head(names(.), 2)) 
   
+  names(lois) <- c("loi", "loiname")
+  
   # merge lois and areas and build a new features
   features <- merge(lois, areas)
   
