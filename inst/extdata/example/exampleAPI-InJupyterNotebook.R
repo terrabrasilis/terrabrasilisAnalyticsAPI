@@ -103,7 +103,7 @@ myCol = c("pink1", "violet", "slateblue1", "purple", "turquoise4", "skyblue", "s
           "orange", "red2", "yellowgreen", "tan3", "brown", "grey30")
 
 # select all years different of 2000
-allStd <- all[all$type == 2 & all$endDate.year != 2000,]
+allStd <- all[all$type == 2 & all$endDate.year > 2000,]
 
 # define names in legend
 legendNames <- unique(factor(allStd$loiname))
@@ -159,10 +159,5 @@ ggplot(allStd, aes(x=as.factor(endDate.year), y=area, color=endDate.year, group=
   expand_limits(y=25) + 
   labs(colour = "Date") + labs(x = "Years") + labs(y = "Areas (km\u00B2)") +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
-
-
-
-
-
 
 
