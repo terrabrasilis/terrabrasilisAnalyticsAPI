@@ -10,7 +10,7 @@ options(warn=-1)
 options(scipen=999) # disable scientific notation
 
 # Initialize Terrabrasilis Analytics API path variable
-apiPath <- "http://terrabrasilis.dpi.inpe.br/dashboard/api/v1/redis-cli/"
+apiPath <- "https://terrabrasilis.dpi.inpe.br/dashboard/api/v1/redis-cli/"
 apiPath
 
 # Define calls for application identifiers listing. From that information, it is possible then to make specific requests to other API end-points.
@@ -81,7 +81,7 @@ ggplot(f11, aes(x=as.factor(endDate.year), y=area, fill=clazz)) +
   labs(colour = "Date") + labs(x = "Years") + labs(y = "Areas (km\u00B2)") + 
   labs(title = loinamesByLoi[10,]$loiname) + labs(fill = "class")
 
-# Compare with SAO PAULO http://www.terrabrasilis.dpi.inpe.br/app/dashboard/deforestation/biomes/cerrado/increments
+# Compare with SAO PAULO https://terrabrasilis.dpi.inpe.br/app/dashboard/deforestation/biomes/cerrado/increments
 
 
 

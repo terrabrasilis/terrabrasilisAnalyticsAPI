@@ -14,7 +14,7 @@ library(terrabrasilisAnalyticsAPI) # R package name is terrabrasilisAnalyticsAPI
 Initialize Terrabrasilis Analytics API path variable
 
 ``` r 
-apiPath <- "http://terrabrasilis.dpi.inpe.br/dashboard/api/v1/redis-cli/"
+apiPath <- "https://terrabrasilis.dpi.inpe.br/dashboard/api/v1/redis-cli/"
 ```
 
 Define calls for application identifiers listing. From that information, it is possible then to make specific requests to other API end-points.
@@ -244,7 +244,7 @@ data
 
 
 In this example, users are able to acquire data by loiname (SÃO PAULO) and dates, we also considered filters in the data. 
-Compare with SÃO PAULO http://www.terrabrasilis.dpi.inpe.br/app/dashboard/deforestation/biomes/cerrado/increments
+Compare with SÃO PAULO https://terrabrasilis.dpi.inpe.br/app/dashboard/deforestation/biomes/cerrado/increments
 ```r
 data <- get_dataByParameters(apiPath, prodesCerrado, classes$name, loinamesByLoi[10,]$gid, "2015-01-01", "2020-12-31") %>% 
   dplyr::filter(.,type==2) %>% 

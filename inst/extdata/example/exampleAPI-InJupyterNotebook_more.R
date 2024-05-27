@@ -7,7 +7,7 @@ options(warn=-1)
 options(scipen=999) # disable scientific notation
 
 # Initialize Terrabrasilis Analytics API path variable
-apiPath <- "http://terrabrasilis.dpi.inpe.br/dashboard/api/v1/redis-cli/"
+apiPath <- "https://terrabrasilis.dpi.inpe.br/dashboard/api/v1/redis-cli/"
 apiPath
 
 # Define calls for application identifiers listing. From that information, it is possible then to make specific requests to other API end-points.

@@ -7,7 +7,7 @@ library(gridExtra)
 library(grid)
 
 # define path for Terrabrasilis Analytics API
-apiPath <- "http://terrabrasilis.dpi.inpe.br/dashboard/api/v1/redis-cli/"
+apiPath <- "https://terrabrasilis.dpi.inpe.br/dashboard/api/v1/redis-cli/"
 
 # get all the application identifier
 appIdentifier <- list_datasets(apiPath)
