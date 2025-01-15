@@ -1,8 +1,10 @@
-# R Client Terrabrasilis Analytics API
+# IMPORTANT NOTE: THIS REPOSITORY HAS BEEN DISCONTINUED.
+
+## R Client Terrabrasilis Analytics API
 
 **terrabrasilisAnalyticsAPI** is an R client package for Terrabrasilis Analytics API. 
 
-## Getting started
+### Getting started
 
 Installing and loading terrabrasilisAnalyticsAPI package in R
 
@@ -290,7 +292,7 @@ Fig. 1. Deforestation increments - Cerrado biome, São Paulo State
 
 
 
-## References
+### References
 
 Assis, L. F. F. G. A.; Ferreira, K. R.; Vinhas, L.; Maurano, L.; Almeida, C. A., Nascimento, J. R., Carvalho, A. F. A.; Camargo, C.; Maciel, A. M. TerraBrasilis: A Spatial Data Infrastructure for Disseminating Deforestation Data from Brazil. In Proceeding of the XIX Remote Sensing Brazilian Symposium, 2019.
 
